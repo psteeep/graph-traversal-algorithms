@@ -24,12 +24,18 @@
     <ClCompile Include="breadth-first_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="depth-first_search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph_algo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="breadth-first_search.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="depth-first_search.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
