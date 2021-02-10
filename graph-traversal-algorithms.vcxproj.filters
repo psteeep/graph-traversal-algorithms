@@ -21,10 +21,7 @@
     <ClCompile Include="graph_algo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="breadth-first_search.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="depth-first_search.cpp">
+    <ClCompile Include="breadth_depth-first_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +29,7 @@
     <ClInclude Include="graph_algo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="breadth-first_search.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="depth-first_search.h">
+    <ClInclude Include="breadth_depth-first_search.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
