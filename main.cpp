@@ -1,102 +1,172 @@
-#include <windows.h>
 #include <iostream>
-#include <glut.h>
+#include <stdlib.h>
+#include <glut.h>  
+#include <vector>
+#include <math.h>
+#include <ctime>
+#include "graph-graphics.h"
+#include <map>
+#include <queue>
 #include <cstdlib>
-#include <cmath>
+#include <chrono>
+#include <thread>
 
-using namespace std;
 
-const int X_COORD = 50;// X - размерность ] должны
-const int Y_COORD = 50;// Y - размерность ] быть равными
-const float ITERATIONS = 0.00005;// прорисовка графика (чем меньше тем лучше)
+int* color; // holds the colors of nodes
+map<int, vector<int> > adjlist; // maps node number to a vector containing node numbers of neighbours
+int vt = 0; // no of vertices drawn
+size_t n = 0, e = 0; // no of nodes and edges
+pair< int, int>* coordinates; // array of coordinates of nodes
+vector <int> final;
 
-int x_off = X_COORD / 2;// начало
-int y_off = Y_COORD / 2;// оси координат
+//unsigned int microseconds;
 
-//исходная функция
-#define expr x
+void display(); // prototype
 
-void drawgrid(float SERIF_OFFSET, float SERIF_DISTANCE) {
-    glBegin(GL_LINES);
-    //задаем цвета
-    glColor3f(0.0, 0.0, 0.0);
 
-    //рисуем координатные оси
-    //горизонталь
-    glVertex2f(0.0, Y_COORD / 2);
-    glVertex2f(X_COORD, Y_COORD / 2);
-    //засечки по горизонтали
-    int p = X_COORD / 2;
-    for (int i = X_COORD / 2; i < X_COORD; i += SERIF_DISTANCE, p -= SERIF_DISTANCE) {
-        glVertex2f(i, Y_COORD / 2);
-        glVertex2f(i, Y_COORD / 2 + SERIF_OFFSET);
-
-        glVertex2f(p, Y_COORD / 2);
-        glVertex2f(p, Y_COORD / 2 + SERIF_OFFSET);
-    }
-    //вертикаль
-    int t = Y_COORD / 2;
-    glVertex2f(X_COORD / 2, Y_COORD);
-    glVertex2f(X_COORD / 2, 0.0);
-    //засечки по вертикали
-    for (int i = Y_COORD / 2; i < Y_COORD; i += SERIF_DISTANCE, t -= SERIF_DISTANCE) {
-        glVertex2f(X_COORD / 2, i);
-        glVertex2f(Y_COORD / 2 + SERIF_OFFSET, i);
-
-        glVertex2f(X_COORD / 2, t);
-        glVertex2f(Y_COORD / 2 + SERIF_OFFSET, t);
-    }
-    glEnd();
+void BFS(int src) // bfs algo
+{
+	vector<int> neighbours = adjlist[src];
+	cout << "exploring neighbors of " << src; nl
+		queue<int> q;
+	this_thread::sleep_for(chrono::microseconds(1200000));
+	//usleep(1200000);
+	//_sleep(1.2);
+	for (int i : neighbours)
+	{
+		if (color[i] == 0)
+		{
+			color[i] = 1;
+			cout << "greying node " << i; nl
+				final.push_back(i);
+			display();
+			this_thread::sleep_for(chrono::microseconds(1200000));
+			//	usleep(1200000);
+			//	_sleep(1.2);
+			q.push(i);
+		}
+	}
+	while (!q.empty())
+	{
+		BFS(q.front());
+		q.pop();
+	}
+	cout << "blacking. completely visited " << src; nl
+		color[src] = 2;
+	display();
+	this_thread::sleep_for(chrono::microseconds(1200000));
+	//usleep(1200000);
+	//_sleep(1.2);
+	if (final.size() == n && src == 0)
+	{
+		cout << "\n";
+		for (int i = 0; i < n; i++)
+		{
+			cout << final[i] << " ";
+		}
+		cout << endl;
+	}
 }
 
-void drawfunc() {
-    //рисуем график
-    glBegin(GL_POINTS);
-    float j = 0;
-    glColor3f(0.8, 0.0, 0.8);
-    for (float x = -X_COORD * 2; x < X_COORD * 2; x += ITERATIONS) {
-        //перерасчитываем координаты
-        j = expr;
-        glVertex2f(x_off + x, y_off + j);//не убирать x и y!! это оффсет по осям!
-    }
-    glEnd();
+
+void mouse(int button, int state, int x, int y)
+{
+	if (vt < n)
+	{
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		{
+			coordinates[vt].first = x;
+			coordinates[vt].second = (700 - y);
+			cout << coordinates[vt].first << '\t' << coordinates[vt].second << '\n';
+			vt++;
+			display();
+			this_thread::sleep_for(chrono::microseconds(600000));
+			//	usleep(600000);
+			//	_sleep(0.6);
+		}
+	}
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+		cout << "\nRunning BFS\n";
+		for (int i = 0; i < n; i++)
+		{
+			if (color[i] == 0)
+			{
+				cout << "greying node " << i; nl
+					color[i] = 1;
+				final.push_back(i);
+				display();
+				BFS(i);
+				this_thread::sleep_for(chrono::microseconds(600000));
+				//	usleep(600000);
+				//	_sleep(0.6);
+			}
+		}
+	}
+}
+void display()
+{
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(1.0, 1.0, 0.0, 0.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for (int i = 0; i < vt; i++)
+	{
+		str = to_string(i);
+		drawCircle(color[i], coordinates[i]);
+	}
+	if (vt == n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			vector<int> neighbours = adjlist[i];
+			for (int j : neighbours)
+			{
+				drawEdge(coordinates[i], coordinates[j]);
+			}
+		}
+	}
+	glColor3f(1.0f, 1.0f, 1.0f);
+	str = "-----------------------------------------------------------";
+	drawstr(10, 110, str.c_str(), str.length());
+	str = "Dijkstra-Shortest Path Algorithm";
+	drawstr(10, 90, str.c_str(), str.length());
+	str = "White - Initial color of the node";
+	drawstr(10, 70, str.c_str(), str.length());
+	str = "Green - The node is being processed";
+	drawstr(10, 50, str.c_str(), str.length());
+	str = "Red - All of its neighbours are reached or the final processing is done";
+	drawstr(10, 30, str.c_str(), str.length());
+	str = "-----------------------------------------------------------";
+	drawstr(10, 10, str.c_str(), str.length());
+	glutSwapBuffers();
 }
 
-void funcinfo(int val1, int val2) {
-    //информация о графике
-    for (float x = val1; x <= val2; x++) {
-        float j = expr;
-        cout << x << " : " << j << endl;
-    }
-}
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    cout << "Osnovnie toshki po vashemu grafiku: \n";
-
-    drawgrid(0.3, 5);
-    drawfunc();
-    funcinfo(-5, 5);
-
-    glutSwapBuffers();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(800, 600);
-    glutInitWindowPosition(500, 200);
-    glutCreateWindow("GLUT_TESTING_APP");
-
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    //пространство координат
-    glOrtho(0.0, X_COORD, 0.0, Y_COORD, -1.0, 1.0);
-
-    glutDisplayFunc(display);
-    glutMainLoop();
+int main(int argc, char** argv)
+{
+	cout << "Enter the number of nodes in the graph"; nl
+		cin >> n;
+	color = new int[n];
+	coordinates = new pair< int, int >[n];
+	memset(color, 0, n * sizeof(int));
+	cout << "Enter the number of edges in the graph"; nl
+		cin >> e;
+	cout << "Enter the edges of the graph (u --> v) pairs"; nl
+		size_t u, v;
+	for (int i = 0; i < e; i++)
+	{
+		cin >> u >> v;
+		adjlist[u].push_back(v);
+		adjlist[v].push_back(u);
+	}
+	/**/
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(1000, 700);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("Breadth First Search");
+	glutDisplayFunc(display);
+	glutMouseFunc(mouse);
+	glutReshapeFunc(handleResize);
+	glutMainLoop();
+	return 0;
 }
