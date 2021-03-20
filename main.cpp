@@ -11,6 +11,7 @@
 #include <chrono>
 #include <thread>
 
+// gg
 
 int* color; // holds the colors of nodes
 map<int, vector<int> > adjlist; // maps node number to a vector containing node numbers of neighbours
@@ -128,7 +129,7 @@ void display()
 	glColor3f(1.0f, 1.0f, 1.0f);
 	str = "-----------------------------------------------------------";
 	drawstr(10, 110, str.c_str(), str.length());
-	str = "Dijkstra-Shortest Path Algorithm";
+	//str = "Dijkstra-Shortest Path Algorithm";
 	drawstr(10, 90, str.c_str(), str.length());
 	str = "White - Initial color of the node";
 	drawstr(10, 70, str.c_str(), str.length());
